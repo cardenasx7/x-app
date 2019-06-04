@@ -1,6 +1,7 @@
 # services/users/manage.py
 
 import unittest
+import coverage
 
 
 from flask.cli import FlaskGroup
@@ -8,6 +9,16 @@ from flask.cli import FlaskGroup
 from project import db  # new    
 from project import create_app
 from project.api.models import User # new
+
+COV = coverage.coverage(
+    branch=True,
+    include='project/*',
+    omit=[
+        'project/test/*',
+        'project/config.py',
+    ]
+)
+COV.start()
 
 app = create_app() # new
 cli = FlaskGroup(create_app=create_app) # new
@@ -33,6 +44,21 @@ def seed_db():
     db.session.add(User(username='cardenas', email='yersoncardenas@upeu.edu.pe'))
     db.session.add(User(username='jerson', email='cardenas.x7@gmail.com'))
     db.session.commit()
+
+@cli.command()
+def cov():
+    """Ejecuta las pruebas unitarias con coverage."""
+    test = unittest.TestLoader().discover('project/tests')
+    result = unittest.TextTestRunner(verbosity=2).run(test)
+    if result.wasSuccessful:
+        COV.stop()
+        COV.save()
+        print('Resumen de cobertura:')
+        COV.report()
+        COV.html_report()
+        COV.erase()
+        return 0
+    sys.exit(result)
 
 
     

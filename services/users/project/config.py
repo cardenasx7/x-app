@@ -4,7 +4,6 @@
 import os
 
 
-
 class BaseConfig:
     """Configuración base"""
     TESTING = False
