@@ -8,6 +8,7 @@ from sqlalchemy import exc
 
 users_blueprint = Blueprint('users', __name__, template_folder='./templates')
 
+
 @users_blueprint.route('/users/ping', methods=['GET'])
 def ping_pong():
     return jsonify({
@@ -15,15 +16,16 @@ def ping_pong():
         'message': 'pong!'
     })
 
+
 @users_blueprint.route('/users', methods=['POST'])
 def add_user():
     post_data = request.get_json()
     response_object = {
-       'status':'fallo',
-       'message':'carga invalido'
+       'status': 'fallo',
+       'message': 'carga invalido'
     }
     if not post_data:
-        return jsonify(response_object),400
+        return jsonify(response_object), 400
     username = post_data.get('username')
     email = post_data.get('email')
     try:
@@ -32,10 +34,10 @@ def add_user():
             db.session.add(User(username=username, email=email))
             db.session.commit()
             response_object['status'] = 'success'
-            response_object['message'] = f'{email} ha sido agregado exitosamente'
+            response_object['message'] = f'{email} ha sido agregado exito'
             return jsonify(response_object), 201
         else:
-            response_object['message']='Lo siento. El email ya existe.'
+            response_object['message'] = 'Lo siento. El email ya existe.'
             return jsonify(response_object), 400
     except exc.IntegrityError:
         db.session.rollback()
@@ -70,14 +72,17 @@ def get_single_user(user_id):
 
 @users_blueprint.route('/users', methods=['GET'])
 def get_all_users():
-   """Obtener detalles de usuario unico"""
-   response_object = {
-       'status':'success',
-       'data':{
-           'users':[user.to_json()for user in User.query.all()]
-       }
-   }
-   return jsonify(response_object), 200
+
+    """ Obtener detalles de usuario unico """
+
+    response_object = {
+        'status': 'success',
+        'data': {
+            'users': [user.to_json()for user in User.query.all()]
+        }
+    }
+    return jsonify(response_object), 200
+
 
 @users_blueprint.route('/', methods=['GET', 'POST'])
 def index():
