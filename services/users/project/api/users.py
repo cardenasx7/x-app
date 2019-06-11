@@ -48,7 +48,7 @@ def add_user():
 def get_single_user(user_id):
     """Obteniendo detalles de un usuario único"""
     response_object = {
-        'status': 'falló',
+        'status': 'fallo',
         'message': 'Usuario no existe'
     }
     try:

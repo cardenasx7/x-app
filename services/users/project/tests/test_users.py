@@ -117,7 +117,7 @@ class TestUserService(BaseTestCase):
             response = self.client.get('/users/blah')
             data = json.loads(response.data.decode())
             self.assertEqual(response.status_code, 404)
-            self.assertIn('El usuario no existe', data['message'])
+            self.assertIn('Usuario no existe', data['message'])
             self.assertIn('fallo', data['status'])
 
     def test_single_user_incorrect_id(self):
@@ -127,7 +127,7 @@ class TestUserService(BaseTestCase):
             response = self.client.get('users/999')
             data = json.loads(response.data.decode())
             self.assertEqual(response.status_code, 404)
-            self.assertIn('El usuario no existe', data['message'])
+            self.assertIn('Usuario no existe', data['message'])
             self.assertIn('fallo', data['status'])
 
     def test_all_users(self):
